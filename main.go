@@ -11,7 +11,7 @@ import (
 var solvers map[int][]solver.Solver
 
 func main() {
-	year := flag.Int("year", 2024, "the year to run")
+	year := flag.Int("year", 2025, "the year to run")
 	day := flag.Int("day", 0, "the solver to run, when set to 0 all solvers will be run")
 	flag.Parse()
 
