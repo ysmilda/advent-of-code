@@ -91,6 +91,7 @@ func Concatenate[T constraints.Integer](x, y T) T {
 	return x*pow + y
 }
 
+// Split splits x halfway. For example x: 1234 becomes 12, 34.
 func Split[T constraints.Integer](x T) (T, T) {
 	divisor := T(10)
 	for x/divisor > divisor {

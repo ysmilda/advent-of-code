@@ -26,6 +26,7 @@ import (
 	aoc2024day8 "github.com/ysmilda/Advent-of-code/solutions/2024/day8"
 	aoc2024day9 "github.com/ysmilda/Advent-of-code/solutions/2024/day9"
 	aoc2025day1 "github.com/ysmilda/Advent-of-code/solutions/2025/day1"
+	aoc2025day2 "github.com/ysmilda/Advent-of-code/solutions/2025/day2"
 )
 
 func init() {
@@ -57,6 +58,7 @@ func init() {
 			aoc2024day12.MustGetSolver(),
 		}, 2025: {
 			aoc2025day1.MustGetSolver(),
+			aoc2025day2.MustGetSolver(),
 		},
 	}
 }

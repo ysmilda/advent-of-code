@@ -30,3 +30,19 @@ func Iterate(base, length int) iter.Seq2[int, []int] {
 		}
 	}
 }
+
+func AllEntriesEqual[T []E, E comparable](slice T) bool {
+	if len(slice) < 2 {
+		return true
+	}
+
+	last := slice[0]
+	for _, item := range slice[1:] {
+		if last != item {
+			return false
+		}
+		last = item
+	}
+
+	return true
+}
