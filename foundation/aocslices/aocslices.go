@@ -31,7 +31,9 @@ func Iterate(base, length int) iter.Seq2[int, []int] {
 	}
 }
 
-func AllEntriesEqual[T []E, E comparable](slice T) bool {
+// AllEqual checks if all entries in the slice are equal.
+// If the given slice is nil or has less than two entries it returns true.
+func AllEqual[T []E, E comparable](slice T) bool {
 	if len(slice) < 2 {
 		return true
 	}

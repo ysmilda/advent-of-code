@@ -290,6 +290,7 @@ func TestNumberOfDigits(t *testing.T) {
 		{12, 2},
 		{123, 3},
 		{1234, 4},
+		{1000, 4},
 		{12345, 5},
 	}
 

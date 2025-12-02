@@ -102,6 +102,10 @@ func Split[T constraints.Integer](x T) (T, T) {
 
 // Pow returns x**y.
 func Pow[T constraints.Integer](x, y T) T {
+	if y == 0 {
+		return 1
+	}
+
 	var i T
 	var out = x
 	for i = 0; i < y-1; i++ {
@@ -110,10 +114,11 @@ func Pow[T constraints.Integer](x, y T) T {
 	return out
 }
 
+// NumberOfDigits returns the number of digits in the integer.
 func NumberOfDigits[T constraints.Integer](x T) T {
 	pow := T(10)
 	n := T(1)
-	for x > pow {
+	for x >= pow {
 		n++
 		pow *= 10
 	}

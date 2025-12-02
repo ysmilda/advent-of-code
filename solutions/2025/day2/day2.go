@@ -2,11 +2,9 @@ package aoc2025day2
 
 import (
 	_ "embed"
-	"strconv"
 	"strings"
 
 	"github.com/ysmilda/Advent-of-code/foundation/aocmath"
-	"github.com/ysmilda/Advent-of-code/foundation/aocslices"
 	"github.com/ysmilda/Advent-of-code/foundation/aocstrconv"
 	"github.com/ysmilda/Advent-of-code/foundation/solver"
 )
@@ -41,7 +39,10 @@ func (s puzzle) Part1() (int, error) {
 				continue
 			}
 
-			if a, b := aocmath.Split(i); a == b {
+			tens := aocmath.Pow(10, n/2)
+			a := i % tens
+			b := i / tens
+			if a == b {
 				sum += i
 			}
 		}
@@ -52,28 +53,29 @@ func (s puzzle) Part1() (int, error) {
 
 func (s puzzle) Part2() (int, error) {
 	sum := 0
-	parts := make([]string, 0, 100)
 
 	for _, r := range s.input {
-		for i := r.min; i <= r.max; i++ {
-			s := strconv.Itoa(i)
-
-			half := len(s) / 2
-			for n := 1; n <= half; n++ {
-				// split s into parts of size n and compare if all parts are equal
-				if len(s)%n != 0 {
+		for value := r.min; value <= r.max; value++ {
+			digits := aocmath.NumberOfDigits(value)
+			for partSize := 1; partSize <= digits/2; partSize++ {
+				if digits%partSize != 0 { // Check if i can be split into parts of size n without remainder
 					continue
 				}
 
-				parts := parts[:0]
-				for i := 0; i <= len(s)-n; i += n {
-					parts = append(parts, s[i:i+n])
+				tens := aocmath.Pow(10, partSize)
+				first := value % tens
+				temp := value / tens
+				for range (digits / partSize) - 1 {
+					current := temp % tens
+					if current != first {
+						goto skip
+					}
+					temp /= tens
 				}
 
-				if aocslices.AllEntriesEqual(parts) {
-					sum += i
-					break
-				}
+				sum += value
+				break
+			skip:
 			}
 		}
 	}
