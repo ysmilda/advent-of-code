@@ -4,8 +4,10 @@ import (
 	_ "embed"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"text/template"
+	"time"
 )
 
 type definition struct {
@@ -21,45 +23,53 @@ var dayTemplate = template.Must(template.New("day").Parse(dayTemplateContent))
 var dayTestTemplateContent string
 var dayTestTemplate = template.Must(template.New("day_test").Parse(dayTestTemplateContent))
 
+var (
+	year, day uint
+)
+
 func main() {
-	year := flag.Uint("year", 2024, "the year to generate for")
-	day := flag.Uint("day", 1, "the day to generate for")
+	flag.UintVar(&year, "year", uint(time.Now().Year()), "the year to generate for")
+	flag.UintVar(&day, "day", 0, "the day to generate for")
 	flag.Parse()
 
-	path := fmt.Sprintf("./solutions/%d/day%d", *year, *day)
+	if day == 0 {
+		log.Fatal("day should have been set")
+	}
+
+	path := fmt.Sprintf("./solutions/%d/day%d", year, day)
 	if _, err := os.ReadDir(path); err == nil {
-		panic(fmt.Errorf("day %d already exists", *day))
+		log.Fatal(fmt.Errorf("day %d already exists", day))
 	}
 
 	err := os.MkdirAll(path, 0o755)
 	if err != nil {
-		panic(err)
+		log.Fatal("Unable to create directory:", err)
 	}
 
-	solutionFile, err := os.Create(fmt.Sprintf("%s/day%d.go", path, *day))
+	solutionFile, err := os.Create(fmt.Sprintf("%s/day%d.go", path, day))
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to create file:", err)
 	}
 	defer solutionFile.Close()
 
-	testFile, err := os.Create(fmt.Sprintf("%s/day%d_test.go", path, *day))
+	testFile, err := os.Create(fmt.Sprintf("%s/day%d_test.go", path, day))
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to create file:", err)
 	}
 	defer testFile.Close()
 
 	def := definition{
-		Day:  *day,
-		Year: *year,
+		Day:  day,
+		Year: year,
 	}
 
 	err = dayTemplate.Execute(solutionFile, def)
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to execute template:", err)
 	}
 
 	err = dayTestTemplate.Execute(testFile, def)
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to execute template:", err)
 	}
 }

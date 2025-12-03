@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -11,13 +12,19 @@ import (
 	"github.com/ysmilda/Advent-of-code/foundation/aocstrconv"
 )
 
+var sessionToken string
+
 func main() {
-	sessionToken := flag.String("session-token", "", "the session token to use for downloading the input")
+	flag.StringVar(&sessionToken, "session-token", "", "the session token to use for downloading the input")
 	flag.Parse()
+
+	if sessionToken == "" {
+		log.Fatal("session-token should be set")
+	}
 
 	years, err := os.ReadDir("./solutions")
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to read directory:", err)
 	}
 
 	for _, year := range years {
@@ -28,14 +35,14 @@ func main() {
 		yearPath := filepath.Join("./solutions", year.Name())
 		days, err := os.ReadDir(yearPath)
 		if err != nil {
-			panic(err)
+			log.Fatal("unable to read directory:", err)
 		}
 
 		for _, day := range days {
 			dayPath := filepath.Join(yearPath, day.Name())
 			dayFolderContents, err := os.ReadDir(dayPath)
 			if err != nil {
-				panic(err)
+				log.Fatal("unable to read directory:", err)
 			}
 
 			skip := false
@@ -51,32 +58,35 @@ func main() {
 			yearInt := aocstrconv.MustAtoi(year.Name())
 			dayInt := aocstrconv.MustAtoi(day.Name()[3:])
 
-			fmt.Printf("Fetching input for %d day %d\n", yearInt, dayInt)
+			log.Printf("Fetching input for %d day %d\n", yearInt, dayInt)
 
 			req, err := http.NewRequest("GET", fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", yearInt, dayInt), nil)
 			if err != nil {
-				panic(err)
+				log.Fatal("unable to create request", err)
+
 			}
 
 			req.AddCookie(&http.Cookie{
 				Name:  "session",
-				Value: *sessionToken,
+				Value: sessionToken,
 			})
 
 			resp, err := http.DefaultClient.Do(req)
 			if err != nil {
-				panic(err)
+				log.Fatal("unable to get input:", err)
+
 			}
 
 			inputFile, err := os.Create(dayPath + "/input.txt")
 			if err != nil {
-				panic(err)
+				log.Fatal("unable to write input to file:", err)
+
 			}
 
 			input, err := io.ReadAll(resp.Body)
 			if err != nil {
 				inputFile.Close()
-				panic(err)
+				log.Fatal("unable to read input from response:", err)
 			}
 
 			if input[len(input)-1] == '\n' {
@@ -87,8 +97,4 @@ func main() {
 			inputFile.Close()
 		}
 	}
-}
-
-func scan(path string) {
-
 }

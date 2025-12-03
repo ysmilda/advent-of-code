@@ -3,6 +3,7 @@ package main
 import (
 	_ "embed"
 	"html/template"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,13 +17,12 @@ var daysTemplateContent string
 var daysTemplate = template.Must(template.New("days").Parse(daysTemplateContent))
 
 func main() {
-
 	// Update the main days.go file to include all defined days.
 	solutions := make(map[int][]int)
 
 	years, err := os.ReadDir("./solutions")
 	if err != nil {
-		panic(err)
+		log.Fatal("Unable to read directory:", err)
 	}
 
 	for _, year := range years {
@@ -35,7 +35,7 @@ func main() {
 		yearPath := filepath.Join("./solutions", year.Name())
 		days, err := os.ReadDir(yearPath)
 		if err != nil {
-			panic(err)
+			log.Fatal("Unable to read directory:", err)
 		}
 
 		for _, day := range days {
@@ -54,12 +54,12 @@ func main() {
 
 	daysFile, err := os.Create("./days.go")
 	if err != nil {
-		panic(err)
+		log.Fatal("Unable to create file:", err)
 	}
 	daysTemplate.Execute(daysFile, solutions)
 
 	err = exec.Command("gofmt", "-w", "days.go").Run()
 	if err != nil {
-		panic(err)
+		log.Fatal("Unable to format file:", err)
 	}
 }
