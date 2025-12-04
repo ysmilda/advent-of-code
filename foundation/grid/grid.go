@@ -18,7 +18,8 @@ func NewGrid[T comparable](width, height uint) Grid[T] {
 	return grid
 }
 
-func NewGridFrom[T comparable](lines []string, parse func(rune) T) Grid[T] {
+// NewGridFromLines takes the lines from the puzzle input and runs the parse function on every rune to return a filled grid.
+func NewGridFromLines[T comparable](lines []string, parse func(rune) T) Grid[T] {
 	grid := NewGrid[T](uint(len(lines[0])), uint(len(lines)))
 
 	for y, row := range lines {
@@ -30,12 +31,25 @@ func NewGridFrom[T comparable](lines []string, parse func(rune) T) Grid[T] {
 	return grid
 }
 
+// CopyFrom returns a deep copy of the given grid.
 func CopyFrom[T comparable](in Grid[T]) Grid[T] {
 	g := NewGrid[T](uint(in.GetWidth()), uint(in.GetHeight()))
 	for i, row := range in {
 		copy(g[i], row)
 	}
 	return g
+}
+
+// Iterate iterates over every coordinate in the grid.
+func (g Grid[T]) Iterate(yield func(Coordinate, T) bool) {
+	for y := range g.GetHeight() {
+		for x := range g.GetWidth() {
+			c := NewCoordinate(x, y)
+			if !yield(c, g.Get(c)) {
+				return
+			}
+		}
+	}
 }
 
 // Valid returns true if the given coordinate is within the grid.
@@ -115,11 +129,9 @@ func (g Grid[T]) Find(b T) (Coordinate, error) {
 func (g Grid[T]) FindAll(b T) []Coordinate {
 	var coordinates []Coordinate
 
-	for y, row := range g {
-		for x, char := range row {
-			if char == b {
-				coordinates = append(coordinates, NewCoordinate(x, y))
-			}
+	for c, v := range g.Iterate {
+		if v == b {
+			coordinates = append(coordinates, c)
 		}
 	}
 

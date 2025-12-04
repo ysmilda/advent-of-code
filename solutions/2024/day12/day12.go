@@ -68,7 +68,7 @@ func (s puzzle) Part2() (int, error) {
 }
 
 func parse(input string) grid.Grid[int] {
-	return grid.NewGridFrom(strings.Split(input, "\n"), func(r rune) int {
+	return grid.NewGridFromLines(strings.Split(input, "\n"), func(r rune) int {
 		return int(byte(r))
 	})
 }
