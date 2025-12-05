@@ -25,10 +25,12 @@ type puzzle struct {
 	input input
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -76,7 +78,7 @@ func (i input) compare(x, y int) int {
 	return 0
 }
 
-func parse(in string) input {
+func (s *puzzle) Parse(in string) {
 	lines := strings.Split(in, "\n")
 
 	result := input{
@@ -109,5 +111,5 @@ func parse(in string) input {
 		result.updates = append(result.updates, update)
 	}
 
-	return result
+	s.input = result
 }

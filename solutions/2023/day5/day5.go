@@ -27,10 +27,12 @@ type mapping struct {
 	spread      int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -88,7 +90,7 @@ func (s puzzle) Part2() (int, error) {
 	return lowest, nil
 }
 
-func parse(input string) garden {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 
 	garden := garden{
@@ -106,7 +108,7 @@ func parse(input string) garden {
 		garden.mappings[len(garden.mappings)-1] = append(garden.mappings[len(garden.mappings)-1], parseRange(line))
 	}
 
-	return garden
+	s.input = garden
 }
 
 func parseRange(input string) mapping {

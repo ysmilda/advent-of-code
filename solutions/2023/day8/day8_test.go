@@ -8,7 +8,7 @@ import (
 )
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 8, day)
 }
@@ -41,11 +41,8 @@ func TestPart1(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		instructions, mapping := parse(tc.input)
-		solver := puzzle{
-			instructions: instructions,
-			directions:   mapping,
-		}
+		solver := puzzle{}
+		solver.Parse(tc.input)
 
 		result, _ := solver.Part1()
 		assert.Equal(t, tc.result, result)
@@ -73,11 +70,8 @@ func TestPart2(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		instructions, mapping := parse(tc.input)
-		solver := puzzle{
-			instructions: instructions,
-			directions:   mapping,
-		}
+		solver := puzzle{}
+		solver.Parse(tc.input)
 
 		result, _ := solver.Part2()
 		assert.Equal(t, tc.result, result)

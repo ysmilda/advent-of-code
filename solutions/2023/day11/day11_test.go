@@ -18,7 +18,7 @@ var testInput = `...#......
 #...#.....`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 11, day)
 }
@@ -33,9 +33,8 @@ func TestCalculateDistances(t *testing.T) {
 		{100, 8410},
 	}
 
-	solver := puzzle{
-		grid: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	for _, tc := range testCases {
 		result := solver.CalculateDistances(tc.step)

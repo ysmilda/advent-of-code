@@ -13,13 +13,15 @@ import (
 var inputFile string
 
 type puzzle struct {
-	input grid.Grid[int]
+	grid grid.Grid[int]
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -29,7 +31,7 @@ func (s puzzle) GetDay() int {
 func (s puzzle) Part1() (int, error) {
 	sum := 0
 
-	input := grid.CopyFrom(s.input)
+	input := grid.CopyFrom(s.grid)
 	visited := map[grid.Coordinate]bool{}
 	index := 255
 
@@ -67,8 +69,8 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) grid.Grid[int] {
-	return grid.NewGridFromLines(strings.Split(input, "\n"), func(r rune) int {
+func (s *puzzle) Parse(input string) {
+	s.grid = grid.NewGridFromLines(strings.Split(input, "\n"), func(r rune) int {
 		return int(byte(r))
 	})
 }

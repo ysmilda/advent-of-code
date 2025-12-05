@@ -77,7 +77,7 @@ func main() {
 
 			}
 
-			inputFile, err := os.Create(dayPath + "/input.txt")
+			InputFile, err := os.Create(dayPath + "/input.txt")
 			if err != nil {
 				log.Fatal("unable to write input to file:", err)
 
@@ -85,7 +85,7 @@ func main() {
 
 			input, err := io.ReadAll(resp.Body)
 			if err != nil {
-				inputFile.Close()
+				InputFile.Close()
 				log.Fatal("unable to read input from response:", err)
 			}
 
@@ -93,8 +93,8 @@ func main() {
 				input = input[:len(input)-1]
 			}
 
-			inputFile.Write(input)
-			inputFile.Close()
+			InputFile.Write(input)
+			InputFile.Close()
 		}
 	}
 }

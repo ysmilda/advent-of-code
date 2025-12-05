@@ -1,6 +1,7 @@
 package aoc2023day7
 
 import (
+	"cmp"
 	_ "embed"
 	"slices"
 	"strings"
@@ -22,10 +23,12 @@ type puzzle struct {
 	input string
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: inputFile,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -35,7 +38,6 @@ func (s puzzle) GetDay() int {
 func (s puzzle) Part1() (int, error) {
 	sum := 0
 	input := sort(parse(s.input, false, "23456789TJQKA"))
-
 	for i, in := range input {
 		sum += (in.bid * (i + 1))
 	}
@@ -51,6 +53,10 @@ func (s puzzle) Part2() (int, error) {
 	}
 
 	return sum, nil
+}
+
+func (s *puzzle) Parse(input string) {
+	s.input = input
 }
 
 func parse(input string, useJokers bool, values string) []hand {
@@ -96,19 +102,11 @@ func parseHand(line string, useJokers bool, values string) hand {
 
 func sort(input []hand) []hand {
 	slices.SortFunc(input, func(a, b hand) int {
-		if a.strength == b.strength {
-			if a.value > b.value {
-				return +1
-			}
-			if a.value < b.value {
-				return -1
-			}
-			return 0
+		i := cmp.Compare(a.strength, b.strength)
+		if i == 0 {
+			return cmp.Compare(a.value, b.value)
 		}
-		if a.strength > b.strength {
-			return +1
-		}
-		return -1
+		return i
 	})
 	return input
 }

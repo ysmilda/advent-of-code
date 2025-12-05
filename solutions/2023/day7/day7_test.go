@@ -13,7 +13,7 @@ KTJJT 220
 QQQJA 483`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 7, day)
 }

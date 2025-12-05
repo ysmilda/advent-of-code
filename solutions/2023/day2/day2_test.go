@@ -13,24 +13,22 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 2, day)
 }
 
 func TestPart1(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part1()
 	assert.Equal(t, 8, result)
 }
 
 func TestPart2(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part2()
 	assert.Equal(t, 2286, result)

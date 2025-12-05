@@ -75,10 +75,12 @@ func (s sequence) ExtrapolateStart() int {
 	return sum
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -105,12 +107,13 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) (output []sequence) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
+	result := []sequence{}
 	for _, line := range lines {
-		output = append(output, sequence{
+		result = append(result, sequence{
 			input: aocstrconv.MustAtoiSlice(strings.Fields(line)),
 		})
 	}
-	return output
+	s.input = result
 }

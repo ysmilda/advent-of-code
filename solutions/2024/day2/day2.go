@@ -17,10 +17,12 @@ type puzzle struct {
 	reports [][]int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		reports: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -59,9 +61,9 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) (reports [][]int) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-
+	reports := [][]int{}
 	for _, line := range lines {
 		if line == "" {
 			continue
@@ -70,7 +72,7 @@ func parse(input string) (reports [][]int) {
 		reports = append(reports, aocstrconv.MustAtoiSlice(strings.Split(line, " ")))
 	}
 
-	return reports
+	s.reports = reports
 }
 
 func isSafe(report []int) bool {

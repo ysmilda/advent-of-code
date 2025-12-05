@@ -31,12 +31,12 @@ func (i instruction) Follow(direction byte) string {
 	panic("invalid direction")
 }
 
-func MustGetSolver() solver.Solver {
-	instructions, mapping := parse(inputFile)
-	return puzzle{
-		instructions: instructions,
-		directions:   mapping,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -105,20 +105,21 @@ func (s puzzle) Part2() (int, error) {
 	return aocmath.LCMs(nodeCounts...), nil
 }
 
-func parse(input string) (string, map[string]instruction) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 	instructions := lines[0]
 
 	replacer := strings.NewReplacer("=", "", "(", "", ")", "", ",", "")
-	mapping := make(map[string]instruction)
+	directions := make(map[string]instruction)
 	for _, line := range lines[2:] {
 		line := replacer.Replace(line)
 		parts := strings.Fields(line)
-		mapping[parts[0]] = instruction{
+		directions[parts[0]] = instruction{
 			left:  parts[1],
 			right: parts[2],
 		}
 	}
 
-	return instructions, mapping
+	s.instructions = instructions
+	s.directions = directions
 }

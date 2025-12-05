@@ -22,12 +22,12 @@ type symbol struct {
 	y      int
 }
 
-func MustGetSolver() solver.Solver {
-	partNumbers, symbols := parse(inputFile)
-	return puzzle{
-		partNumbers: partNumbers,
-		symbols:     symbols,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -64,7 +64,7 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) ([]int, map[symbol][]int) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 
 	symbols := make(map[symbol][]int)
@@ -113,5 +113,6 @@ func parse(input string) ([]int, map[symbol][]int) {
 		}
 	}
 
-	return partNumbers, symbols
+	s.partNumbers = partNumbers
+	s.symbols = symbols
 }

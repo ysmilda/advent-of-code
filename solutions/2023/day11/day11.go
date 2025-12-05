@@ -87,10 +87,12 @@ func (s puzzle) GetGalaxies() []grid.Coordinate {
 	return galaxies
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		grid: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -105,14 +107,14 @@ func (s puzzle) Part2() (int, error) {
 	return s.CalculateDistances(1000000), nil
 }
 
-func parse(input string) grid.Grid[bool] {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-	output := grid.NewGrid[bool](uint(len(lines[0])), uint(len(lines)))
+	result := grid.NewGrid[bool](uint(len(lines[0])), uint(len(lines)))
 
 	for i, line := range lines {
 		for j, char := range line {
-			output.Set(grid.NewCoordinate(j, i), char == '#')
+			result.Set(grid.NewCoordinate(j, i), char == '#')
 		}
 	}
-	return output
+	s.grid = result
 }

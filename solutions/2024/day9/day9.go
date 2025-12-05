@@ -15,10 +15,12 @@ type puzzle struct {
 	input []int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -112,7 +114,7 @@ func (s puzzle) Part2() (int, error) {
 	return checksum(disk), nil
 }
 
-func parse(input string) []int {
+func (s *puzzle) Parse(input string) {
 	result := []int{}
 	for i, c := range input {
 		if c == '0' {
@@ -124,7 +126,7 @@ func parse(input string) []int {
 			result = append(result, slices.Repeat([]int{-1}, char.ToInt(byte(c)))...)
 		}
 	}
-	return result
+	s.input = result
 }
 
 func checksum(in []int) int {

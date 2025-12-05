@@ -16,10 +16,12 @@ type puzzle struct {
 	input []int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -58,15 +60,15 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) []int {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-	out := make([]int, 0, len(lines))
+	result := make([]int, 0, len(lines))
 	for _, line := range lines {
 		value := aocstrconv.MustAtoi(line[1:])
 		if line[0] == 'L' {
 			value *= -1
 		}
-		out = append(out, value)
+		result = append(result, value)
 	}
-	return out
+	s.input = result
 }

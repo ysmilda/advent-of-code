@@ -33,10 +33,12 @@ func (h hand) multiply() int {
 	return h.red * h.green * h.blue
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -76,14 +78,14 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) []game {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 
 	games := []game{}
 	for _, line := range lines {
 		games = append(games, parseGame(line))
 	}
-	return games
+	s.input = games
 }
 
 func parseGame(input string) game {

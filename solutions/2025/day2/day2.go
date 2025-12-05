@@ -20,10 +20,12 @@ type idrange struct {
 	min, max int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -83,15 +85,15 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) []idrange {
+func (s *puzzle) Parse(input string) {
 	ranges := strings.Split(input, ",")
-	out := make([]idrange, 0, len(ranges))
+	results := make([]idrange, 0, len(ranges))
 	for _, r := range ranges {
 		parts := strings.Split(r, "-")
-		out = append(out, idrange{
+		results = append(results, idrange{
 			min: aocstrconv.MustAtoi(parts[0]),
 			max: aocstrconv.MustAtoi(parts[1]),
 		})
 	}
-	return out
+	s.input = results
 }

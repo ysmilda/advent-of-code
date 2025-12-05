@@ -16,12 +16,12 @@ type puzzle struct {
 	size     grid.Coordinate
 }
 
-func MustGetSolver() solver.Solver {
-	antennas, size := parse(inputFile)
-	return puzzle{
-		antennas: antennas,
-		size:     size,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -89,7 +89,7 @@ func (s puzzle) Part2() (int, error) {
 	return len(antinodes), nil
 }
 
-func parse(input string) (map[byte][]grid.Coordinate, grid.Coordinate) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 	antennas := make(map[byte][]grid.Coordinate)
 
@@ -103,5 +103,6 @@ func parse(input string) (map[byte][]grid.Coordinate, grid.Coordinate) {
 		}
 	}
 
-	return antennas, grid.NewCoordinate(len(lines[0]), len(lines))
+	s.antennas = antennas
+	s.size = grid.NewCoordinate(len(lines[0]), len(lines))
 }

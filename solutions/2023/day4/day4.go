@@ -20,10 +20,12 @@ type card struct {
 	matchingNumbers int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		cards: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -56,7 +58,7 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) []card {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 
 	output := []card{}
@@ -71,7 +73,7 @@ func parse(input string) []card {
 		})
 	}
 
-	return output
+	s.cards = output
 }
 
 func matchingNumbers(winningNumbers, numbers []int) (output int) {

@@ -27,10 +27,12 @@ type freshIDrange struct {
 	start, end int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -86,22 +88,22 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) database {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-	out := database{}
+	result := database{}
 
 	for i, line := range lines {
 		if line == "" {
-			out.IDs = aocstrconv.MustAtoiSlice(lines[i+1:])
+			result.IDs = aocstrconv.MustAtoiSlice(lines[i+1:])
 			break
 		}
 
 		parts := strings.Split(line, "-")
-		out.freshIDs = append(out.freshIDs, &freshIDrange{
+		result.freshIDs = append(result.freshIDs, &freshIDrange{
 			start: aocstrconv.MustAtoi(parts[0]),
 			end:   aocstrconv.MustAtoi(parts[1]),
 		})
 	}
 
-	return out
+	s.input = result
 }

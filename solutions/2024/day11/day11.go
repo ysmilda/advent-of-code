@@ -16,10 +16,12 @@ type puzzle struct {
 	input []int
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -35,9 +37,9 @@ func (s puzzle) Part2() (int, error) {
 	return blink(75, s.input), nil
 }
 
-func parse(input string) []int {
+func (s *puzzle) Parse(input string) {
 	parts := strings.Split(input, " ")
-	return aocstrconv.MustAtoiSlice(parts)
+	s.input = aocstrconv.MustAtoiSlice(parts)
 }
 
 func blink(times int, in []int) int {

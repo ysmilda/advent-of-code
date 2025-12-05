@@ -22,10 +22,12 @@ type puzzle struct {
 	input []equation
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -82,9 +84,9 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) (result []equation) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-
+	result := []equation{}
 	for _, line := range lines {
 		equation := equation{}
 		colon := strings.Index(line, ":")
@@ -99,5 +101,5 @@ func parse(input string) (result []equation) {
 		result = append(result, equation)
 	}
 
-	return result
+	s.input = result
 }

@@ -19,12 +19,12 @@ type puzzle struct {
 	right []int
 }
 
-func MustGetSolver() solver.Solver {
-	left, right := parse(inputFile)
-	return puzzle{
-		left:  left,
-		right: right,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -64,8 +64,9 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) (left []int, right []int) {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
+	left, right := []int{}, []int{}
 	for _, line := range lines {
 		if len(line) == 0 {
 			continue
@@ -76,5 +77,5 @@ func parse(input string) (left []int, right []int) {
 		right = append(right, aocstrconv.MustAtoi(strings.TrimSpace(elements[1])))
 	}
 
-	return left, right
+	s.left, s.right = left, right
 }

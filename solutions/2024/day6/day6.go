@@ -19,13 +19,12 @@ type puzzle struct {
 	direction grid.Direction
 }
 
-func MustGetSolver() solver.Solver {
-	g, s, d := parse(inputFile)
-	return puzzle{
-		grid:      g,
-		start:     s,
-		direction: d,
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -124,7 +123,7 @@ func Solve(g grid.Grid[bool], start grid.Coordinate, direction grid.Direction, v
 	}
 }
 
-func parse(input string) (grid.Grid[bool], grid.Coordinate, grid.Direction) {
+func (s *puzzle) Parse(input string) {
 	var (
 		lines     = strings.Split(input, "\n")
 		g         = grid.NewGrid[bool](uint(len(lines[0])), uint(len(lines)))
@@ -143,5 +142,7 @@ func parse(input string) (grid.Grid[bool], grid.Coordinate, grid.Direction) {
 		}
 	}
 
-	return g, start, direction
+	s.grid = g
+	s.start = start
+	s.direction = direction
 }

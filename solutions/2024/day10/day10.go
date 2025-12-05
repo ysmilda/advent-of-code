@@ -12,13 +12,15 @@ import (
 var inputFile string
 
 type puzzle struct {
-	input grid.Grid[byte]
+	grid grid.Grid[byte]
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -28,7 +30,7 @@ func (s puzzle) GetDay() int {
 func (s puzzle) Part1() (int, error) {
 	sum := 0
 
-	for y, row := range s.input {
+	for y, row := range s.grid {
 		for x, c := range row {
 			if c != 0 {
 				continue
@@ -49,7 +51,7 @@ func (s puzzle) Part1() (int, error) {
 func (s puzzle) Part2() (int, error) {
 	sum := 0
 
-	for y, row := range s.input {
+	for y, row := range s.grid {
 		for x, c := range row {
 			if c != 0 {
 				continue
@@ -64,7 +66,7 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) grid.Grid[byte] {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
 	g := grid.NewGrid[byte](uint(len(lines[0])), uint(len(lines)))
 
@@ -74,17 +76,17 @@ func parse(input string) grid.Grid[byte] {
 		}
 	}
 
-	return g
+	s.grid = g
 }
 
 func (s puzzle) check(coord grid.Coordinate, found func(grid.Coordinate)) {
-	if s.input.Get(coord) == 9 {
+	if s.grid.Get(coord) == 9 {
 		found(coord)
 		return
 	}
 
 	for _, direction := range grid.CardinalDirections {
-		if next := coord.MoveInDirection(direction, 1); s.input.Valid(next) && s.input.Get(next) == s.input.Get(coord)+1 {
+		if next := coord.MoveInDirection(direction, 1); s.grid.Valid(next) && s.grid.Get(next) == s.grid.Get(coord)+1 {
 			s.check(next, found)
 		}
 	}

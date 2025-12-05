@@ -41,24 +41,22 @@ humidity-to-location map:
 56 93 4`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 5, day)
 }
 
 func TestPart1(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part1()
 	assert.Equal(t, 35, result)
 }
 
 func TestPart2(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part2()
 	assert.Equal(t, 46, result)

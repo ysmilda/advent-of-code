@@ -14,24 +14,22 @@ Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 4, day)
 }
 
 func TestPart1(t *testing.T) {
-	solver := puzzle{
-		cards: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part1()
 	assert.Equal(t, 13, result)
 }
 
 func TestPart2(t *testing.T) {
-	solver := puzzle{
-		cards: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part2()
 	assert.Equal(t, 30, result)

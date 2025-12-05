@@ -15,10 +15,12 @@ type puzzle struct {
 	input []string
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -96,6 +98,6 @@ func replace(line string) string {
 	return line
 }
 
-func parse(input string) []string {
-	return strings.Split(input, "\n")
+func (s *puzzle) Parse(input string) {
+	s.input = strings.Split(input, "\n")
 }

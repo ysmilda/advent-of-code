@@ -124,10 +124,12 @@ func (s puzzle) Loop() int {
 	return steps
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		grid: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -145,13 +147,13 @@ func (s puzzle) Part2() (int, error) {
 	return sum, nil
 }
 
-func parse(input string) grid.Grid[byte] {
+func (s *puzzle) Parse(input string) {
 	lines := strings.Split(input, "\n")
-	output := grid.NewGrid[byte](uint(len(lines[0])), uint(len(lines)))
+	result := grid.NewGrid[byte](uint(len(lines[0])), uint(len(lines)))
 
 	for i, line := range lines {
-		output[i] = []byte(line)
+		result[i] = []byte(line)
 	}
 
-	return output
+	s.grid = result
 }

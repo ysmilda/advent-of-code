@@ -9,7 +9,7 @@ import (
 func init() {
 	solvers = map[int][]solver.Solver{
     {{ range $year, $days := . }}   {{$year}}: {
-    {{ range $day := $days}}        aoc{{$year}}day{{$day}}.MustGetSolver(),
+    {{ range $day := $days}}        aoc{{$year}}day{{$day}}.GetSolver(),
     {{ end }}},{{ end }}
 	}
 }

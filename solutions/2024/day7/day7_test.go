@@ -17,24 +17,22 @@ var testInput = `190: 10 19
 292: 11 6 16 20`
 
 func TestGetDay(t *testing.T) {
-	solver := MustGetSolver()
+	solver := GetSolver()
 	day := solver.GetDay()
 	assert.Equal(t, 7, day)
 }
 
 func TestPart1(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part1()
 	assert.Equal(t, 3749, result)
 }
 
 func TestPart2(t *testing.T) {
-	solver := puzzle{
-		input: parse(testInput),
-	}
+	solver := puzzle{}
+	solver.Parse(testInput)
 
 	result, _ := solver.Part2()
 	assert.Equal(t, 11387, result)

@@ -32,10 +32,12 @@ func (r race) findNumberOfWaysToWin() int {
 	return int(math.Ceil(p2) - math.Floor(p1) - 1)
 }
 
-func MustGetSolver() solver.Solver {
-	return puzzle{
-		input: parse(inputFile),
-	}
+func GetSolver() solver.Solver {
+	return &puzzle{}
+}
+
+func (s puzzle) GetTestInput() string {
+	return inputFile
 }
 
 func (s puzzle) GetDay() int {
@@ -70,7 +72,8 @@ func (s puzzle) Part2() (int, error) {
 	return combinedRace.findNumberOfWaysToWin(), nil
 }
 
-func parse(input string) (output []race) {
+func (s *puzzle) Parse(input string) {
+	result := []race{}
 	lines := strings.Split(input, "\n")
 	times := strings.Fields(lines[0])
 	distances := strings.Fields(lines[1])
@@ -82,11 +85,11 @@ func parse(input string) (output []race) {
 		if i == 0 {
 			continue
 		}
-		output = append(output, race{
+		result = append(result, race{
 			time:     aocstrconv.MustAtoi(times[i]),
 			distance: aocstrconv.MustAtoi(distances[i]),
 		})
 	}
 
-	return output
+	s.input = result
 }
