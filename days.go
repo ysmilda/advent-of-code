@@ -29,6 +29,7 @@ import (
 	aoc2025day2 "github.com/ysmilda/Advent-of-code/solutions/2025/day2"
 	aoc2025day3 "github.com/ysmilda/Advent-of-code/solutions/2025/day3"
 	aoc2025day4 "github.com/ysmilda/Advent-of-code/solutions/2025/day4"
+	aoc2025day5 "github.com/ysmilda/Advent-of-code/solutions/2025/day5"
 )
 
 func init() {
@@ -63,6 +64,7 @@ func init() {
 			aoc2025day2.MustGetSolver(),
 			aoc2025day3.MustGetSolver(),
 			aoc2025day4.MustGetSolver(),
+			aoc2025day5.MustGetSolver(),
 		},
 	}
 }
