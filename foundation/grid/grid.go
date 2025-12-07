@@ -72,6 +72,13 @@ func (g Grid[T]) Get(c Coordinate) T {
 	return g[uint(c.Y)][uint(c.X)]
 }
 
+func (g Grid[T]) GetValid(c Coordinate) (T, bool) {
+	if !g.Valid(c) {
+		return *new(T), false
+	}
+	return g.Get(c), true
+}
+
 // Set sets the element at the given coordinate. It assumes the coordinate is valid.
 func (g Grid[T]) Set(c Coordinate, b T) {
 	g[uint(c.Y)][uint(c.X)] = b
